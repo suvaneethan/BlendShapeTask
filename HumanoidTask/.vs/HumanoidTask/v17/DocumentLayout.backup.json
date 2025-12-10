@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\BlendShapeTask\\HumanoidTask\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|D:\\BlendShapeTask\\HumanoidTask\\assets\\scripts\\reactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\reactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|D:\\BlendShapeTask\\HumanoidTask\\assets\\scripts\\loginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\loginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|d:\\blendshapetask\\humanoidtask\\assets\\scripts\\lipsynccontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|D:\\BlendShapeTask\\HumanoidTask\\assets\\scripts\\lipsynccontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\lipsynccontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|D:\\BlendShapeTask\\HumanoidTask\\assets\\scripts\\loginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\loginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|d:\\blendshapetask\\humanoidtask\\assets\\scripts\\reactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78EA35A4-8584-8F98-DB59-EE553506C7AD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\reactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,17 +22,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "ReactionController.cs",
               "DocumentMoniker": "D:\\BlendShapeTask\\HumanoidTask\\Assets\\Scripts\\ReactionController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ReactionController.cs",
               "ToolTip": "D:\\BlendShapeTask\\HumanoidTask\\Assets\\Scripts\\ReactionController.cs",
               "RelativeToolTip": "Assets\\Scripts\\ReactionController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwCYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-09T17:25:17.698Z",
               "EditorCaption": ""
@@ -45,22 +45,23 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\LipSyncController.cs",
               "ToolTip": "D:\\BlendShapeTask\\HumanoidTask\\Assets\\Scripts\\LipSyncController.cs",
               "RelativeToolTip": "Assets\\Scripts\\LipSyncController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwAUAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-09T10:47:42.543Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "LoginManager.cs",
               "DocumentMoniker": "D:\\BlendShapeTask\\HumanoidTask\\Assets\\Scripts\\LoginManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\LoginManager.cs",
               "ToolTip": "D:\\BlendShapeTask\\HumanoidTask\\Assets\\Scripts\\LoginManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\LoginManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwBsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T10:07:39.782Z"
+              "WhenOpened": "2025-12-09T10:07:39.782Z",
+              "EditorCaption": ""
             }
           ]
         }

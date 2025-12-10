@@ -155,7 +155,7 @@ MonoBehaviour:
   faceMesh: {fileID: 853949662}
   mouthBlendshapeIndex: 6
   sensitivity: 65
-  smoothSpeed: 10
+  smoothSpeed: 12
 --- !u!114 &319921698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,11 +169,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playButton: {fileID: 1714703933}
+  charState: {fileID: 1185948629}
   animator: {fileID: 1667718443}
   audioSource: {fileID: 645877520}
   dialogueClip: {fileID: 8300000, guid: cdf17e12f799c5847b21d8aa595775b8, type: 3}
   lipSync: {fileID: 319921697}
-  charState: {fileID: 1185948629}
+  faceUpdate: {fileID: 1667718446}
   faceMesh: {fileID: 853949662}
 --- !u!4 &319921699
 Transform:
@@ -641,12 +642,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 8867670ee0e19b34d9bebbb32c9d839a, type: 2}
     - target: {fileID: 9500000, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
+      propertyPath: m_UpdateMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
       propertyPath: m_CullingMode
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
+      propertyPath: delayWeight
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
       propertyPath: m_Enabled
@@ -713,7 +722,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 11400000, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
     - {fileID: 11400002, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1348,6 +1356,17 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 9500000, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
   m_PrefabInstance: {fileID: 502931752}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1667718446 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11400000, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
+  m_PrefabInstance: {fileID: 502931752}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e658bfc1e524494b9e54a1c92d8c1e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1714703931
 GameObject:
   m_ObjectHideFlags: 0

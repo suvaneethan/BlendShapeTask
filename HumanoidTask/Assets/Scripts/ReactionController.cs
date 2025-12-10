@@ -1,42 +1,54 @@
 ﻿using System.Collections;
 using TMPro;
+using UnityChan;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ReactionController : MonoBehaviour
 {
+    [Header("UI / Controls")]
     public Button playButton;
+    public TextMeshProUGUI charState;
+
+    [Header("Animation")]
     public Animator animator;
+
+    [Header("Audio / LipSync")]
     public AudioSource audioSource;
     public AudioClip dialogueClip;
     public LipSyncController lipSync;
-    public TextMeshProUGUI charState;
 
-    public SkinnedMeshRenderer faceMesh;   // Assign MTH_DEF
+    [Header("UnityChan Face System")]
+    public FaceUpdate faceUpdate;
+
+    // USE REAL NAMES FROM YOUR PROJECT
+    string faceDefault = "default@unitychan";
+    string faceHappy = "conf@unitychan";             // closest happy animation
+    string faceSad = "ASHAMED";                     // sad/upset expression
+    string faceSoftSad = "disstract1@unitychan";    // mild sad/low emotion
+
+    [Header("Optional Blendshape Reset")]
+    public SkinnedMeshRenderer faceMesh;
 
     private bool isRunning = false;
     private bool queued = false;
 
-    // Blendshape indices
-    int smile1, smile2;
-    int sad1, conf1, angry1;
-    int jawOpen;
+    // Audio emotion timing
+    readonly float happyA_end = 1.40f;
+    readonly float sadA_end = 3.20f;
+    readonly float happyB_end = 5.20f;
+    readonly float softSad_end = 7.50f;
 
     void Start()
     {
-        audioSource.clip = dialogueClip;
+        if (dialogueClip != null)
+            audioSource.clip = dialogueClip;
+
         playButton.onClick.AddListener(OnPlayPressed);
 
         charState.text = "Idle";
 
-        // Read blendshape indices from mesh
-        smile1 = faceMesh.sharedMesh.GetBlendShapeIndex("MTH_SMILE1");
-        smile2 = faceMesh.sharedMesh.GetBlendShapeIndex("MTH_SMILE2");
-        sad1 = faceMesh.sharedMesh.GetBlendShapeIndex("MTH_SAP");   // sad mouth
-        conf1 = faceMesh.sharedMesh.GetBlendShapeIndex("MTH_CONF");  // worried brows
-        angry1 = faceMesh.sharedMesh.GetBlendShapeIndex("MTH_ANG1");  // slight pinch
-        jawOpen = faceMesh.sharedMesh.GetBlendShapeIndex("MTH_A");
-
+        ResetFaceLayer();
     }
 
     void OnPlayPressed()
@@ -46,141 +58,121 @@ public class ReactionController : MonoBehaviour
             queued = true;
             return;
         }
-        StartCoroutine(FullSequence());
+        StartCoroutine(PlayRoutine());
     }
 
-    IEnumerator FullSequence()
+    IEnumerator PlayRoutine()
     {
         isRunning = true;
         queued = false;
 
+        animator.Play("Idle", 0, 0);
+        animator.Update(0);
+
+        ResetFaceLayer();
+        ClearBlendshapes();
+
         audioSource.Stop();
         audioSource.time = 0f;
 
+        // Start audio + lip sync
         audioSource.Play();
         lipSync.StartLipSync(audioSource);
+
         charState.text = "Speaking...";
 
-        // Run emotion sequence in parallel with audio
-        yield return StartCoroutine(RunEmotionSequence());
+        yield return StartCoroutine(EmotionTimeline());
 
-        // Wait until audio fully finishes
         while (audioSource.isPlaying)
             yield return null;
 
-        // Stop lip sync
         lipSync.StopLipSync();
-        charState.text = "Idle";
+        ResetFaceLayer();
+        ClearBlendshapes();
 
-        // Reset audio for next button press
-        audioSource.Stop();
-        audioSource.time = 0f;
+        charState.text = "Idle";
 
         isRunning = false;
 
-        // If button was pressed during playback → auto replay
         if (queued)
         {
             queued = false;
-            StartCoroutine(FullSequence());
+            StartCoroutine(PlayRoutine());
         }
     }
 
-    IEnumerator RunEmotionSequence()
+    // ---------------- Emotion Timeline ------------------
+
+    IEnumerator EmotionTimeline()
     {
-        // SMILE
-        yield return PlaySmile();
-        yield return WaitForState("Idle");
+        float start = Time.time;
+        float Elapsed() => Time.time - start;
+
+        // HAPPY
+        ApplyHappyFace();
+        animator.SetTrigger("SmileTrigger");
+        while (Elapsed() < happyA_end) yield return null;
 
         // SAD
-        yield return PlaySad();
-        yield return WaitForState("Idle");
-
-        // SMILE AGAIN
-        yield return PlaySmile();
-        yield return WaitForState("Idle");
-
-        // SAD AGAIN
-        yield return PlaySad();
-        yield return WaitForState("Idle");
-    }
-
-    // -------------------------------
-    // EMOTION FUNCTIONS
-    // -------------------------------
-
-    IEnumerator PlaySmile()
-    {
-        charState.text = "Smile";
-
-        ClearAllBlendshapes();
-        SetExpression(smile1, 85f);
-        SetExpression(smile2, 60f);
-
-        animator.SetTrigger("SmileTrigger");
-
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Smile"))
-            yield return null;
-
-        float len = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(len);
-
-        ClearAllBlendshapes();
-    }
-
-    IEnumerator PlaySad()
-    {
-        charState.text = "Sad";
-
-        ClearAllBlendshapes();
-
-        // Sad mouth droop
-        SetExpression(sad1, 90f);
-
-        // Lower brows for dull/tired look
-        if (conf1 >= 0) SetExpression(conf1, 40f);
-
-        // Very slight brow pinch for emotional depth
-        if (angry1 >= 0) SetExpression(angry1, 8f);
-
-        // NEW → Slight jaw open for dull/sad look
-        if (jawOpen >= 0) SetExpression(jawOpen, 18f);
-
+        ApplySadFace();
         animator.SetTrigger("SadTrigger");
+        while (Elapsed() < sadA_end) yield return null;
 
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Sad"))
-            yield return null;
+        // HAPPY
+        ApplyHappyFace();
+        animator.SetTrigger("SmileTrigger");
+        while (Elapsed() < happyB_end) yield return null;
 
-        float len = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(len);
+        // SOFT SAD
+        ApplySoftSadFace();
+        animator.SetTrigger("SadTrigger");
+        while (Elapsed() < softSad_end) yield return null;
 
-        ClearAllBlendshapes();
+        // NEUTRAL
+        ResetFaceLayer();
     }
 
+    // ---------------- Facial Expression Controls ------------------
 
-    // -------------------------------
-    // BLENDSHAPE HELPERS
-    // -------------------------------
-
-    void SetExpression(int index, float value)
+    void ApplyHappyFace()
     {
-        if (index >= 0)
-            faceMesh.SetBlendShapeWeight(index, value);
+        ResetFaceLayer();
+        faceUpdate.OnCallChangeFace(faceHappy);
+        charState.text = "Happy 😊";
     }
 
-    void ClearAllBlendshapes()
+    void ApplySadFace()
     {
-        for (int i = 0; i < faceMesh.sharedMesh.blendShapeCount; i++)
+        ResetFaceLayer();
+        faceUpdate.OnCallChangeFace(faceSad);
+        charState.text = "Sad 😢";
+    }
+
+    void ApplySoftSadFace()
+    {
+        ResetFaceLayer();
+        faceUpdate.OnCallChangeFace(faceSoftSad);
+        charState.text = "Soft Sad 😔";
+    }
+
+    void ResetFaceLayer()
+    {
+        if (faceUpdate == null) return;
+
+        faceUpdate.isKeepFace = false;
+        animator.SetLayerWeight(1, 0f);
+
+        faceUpdate.OnCallChangeFace(faceDefault);
+    }
+
+    // ---------------- Blendshape Cleanup ------------------
+
+    void ClearBlendshapes()
+    {
+        if (faceMesh == null) return;
+
+        int count = faceMesh.sharedMesh.blendShapeCount;
+        for (int i = 0; i < count; i++)
             faceMesh.SetBlendShapeWeight(i, 0);
-    }
-
-    // -------------------------------
-    // WAIT FOR STATE
-    // -------------------------------
-
-    IEnumerator WaitForState(string stateName)
-    {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(stateName))
-            yield return null;
     }
 }
