@@ -19,7 +19,6 @@ public class ReactionController : MonoBehaviour
     {
         audioSource.clip = dialogueClip;
         playButton.onClick.AddListener(OnPlayPressed);
-
         charState.text = "Idle";
     }
 
@@ -38,45 +37,44 @@ public class ReactionController : MonoBehaviour
         isRunning = true;
         queued = false;
 
+        // Reset audio
         audioSource.Stop();
         audioSource.time = 0f;
 
-        // 1️⃣ Smile → Idle
-        yield return PlayAnimation("SmileTrigger", "Smile", "Smile");
-        yield return WaitForState("Idle");
-        charState.text = "Idle";
-
-        // 2️⃣ Sad → Idle
-        yield return PlayAnimation("SadTrigger", "Sad", "Sad");
-        yield return WaitForState("Idle");
-        charState.text = "Idle";
-
-        // 3️⃣ Smile → Idle
-        yield return PlayAnimation("SmileTrigger", "Smile", "Smile");
-        yield return WaitForState("Idle");
-        charState.text = "Idle";
-
-        // 4️⃣ Sad → Idle
-        yield return PlayAnimation("SadTrigger", "Sad", "Sad");
-        yield return WaitForState("Idle");
-        charState.text = "Idle";
-
-        // 5️⃣ SPEAKING + AUDIO
-        charState.text = "Speaking...";
+        // Start audio + lip sync FIRST
         audioSource.Play();
         lipSync.StartLipSync(audioSource);
+        charState.text = "Speaking...";
 
+        // While audio plays, run emotion sequence in parallel
+        yield return StartCoroutine(RunEmotionSequence());
+
+        // Wait until audio finishes
         while (audioSource.isPlaying)
             yield return null;
 
         lipSync.StopLipSync();
-
         charState.text = "Idle";
 
         isRunning = false;
 
         if (queued)
             StartCoroutine(FullSequence());
+    }
+
+    IEnumerator RunEmotionSequence()
+    {
+        // Smile
+        yield return PlayAnimation("SmileTrigger", "Smile", "Smile");
+
+        // Sad
+        yield return PlayAnimation("SadTrigger", "Sad", "Sad");
+
+        // Smile again
+        yield return PlayAnimation("SmileTrigger", "Smile", "Smile");
+
+        // Sad again
+        yield return PlayAnimation("SadTrigger", "Sad", "Sad");
     }
 
     IEnumerator PlayAnimation(string trigger, string stateName, string stateText)
@@ -88,17 +86,12 @@ public class ReactionController : MonoBehaviour
 
         animator.SetTrigger(trigger);
 
-        // Wait to enter the correct animation state
+        // Wait for animation to start
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName(stateName))
             yield return null;
 
+        // Wait for animation duration
         float len = animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(len);
-    }
-
-    IEnumerator WaitForState(string stateName)
-    {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(stateName))
-            yield return null;
     }
 }
